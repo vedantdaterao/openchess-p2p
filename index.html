@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Chess</title>
+    <link rel="stylesheet" href="normalize.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="chess.js" defer></script>
+  </head>
+  <body>
+    <!-- <body bgcolor="#181818"> -->
+    <div
+      class="app"
+      style="display: grid; grid-template-columns: min-content auto"
+    >
+      <div class="rank-labels">
+        <div><p>8</p></div>
+        <div><p>7</p></div>
+        <div><p>6</p></div>
+        <div><p>5</p></div>
+        <div><p>4</p></div>
+        <div><p>3</p></div>
+        <div><p>2</p></div>
+        <div><p>1</p></div>
+      </div>
+      <!-- <div style="display: grid; grid-template-rows: repeat(8, 72px)">
+        <div><p style="padding-top: 100%">8</p></div>
+        <div><p style="padding-top: 100%">7</p></div>
+        <div><p style="padding-top: 100%">6</p></div>
+        <div><p style="padding-top: 100%">5</p></div>
+        <div><p style="padding-top: 100%">4</p></div>
+        <div><p style="padding-top: 100%">3</p></div>
+        <div><p style="padding-top: 100%">2</p></div>
+        <div><p style="padding-top: 100%">1</p></div>
+      </div> -->
+      <div class="board"></div>
+    </div>
+      <div class="file-labels">
+        <div><p>a</p></div>
+        <div><p>b</p></div>
+        <div><p>c</p></div>
+        <div><p>d</p></div>
+        <div><p>e</p></div>
+        <div><p>f</p></div>
+        <div><p>g</p></div>
+        <div><p>h</p></div>
+      </div>
+    <!-- <div style="margin-left: 8px">
+      <div style="display: grid; grid-template-columns: repeat(8, 72px)">
+        <div><p style="padding-left: 30px; margin: 0px">a</p></div>
+        <div><p style="padding-left: 30px; margin: 0px">b</p></div>
+        <div><p style="padding-left: 30px; margin: 0px">c</p></div>
+        <div><p style="padding-left: 30px; margin: 0px">d</p></div>
+        <div><p style="padding-left: 30px; margin: 0px">e</p></div>
+        <div><p style="padding-left: 30px; margin: 0px">f</p></div>
+        <div><p style="padding-left: 30px; margin: 0px">g</p></div>
+        <div><p style="padding-left: 30px; margin: 0px">h</p></div>
+      </div> -->
+      <!-- <img src="piece_riohacha/bP.svg" /> -->
+    </div>
+    <div class="move_history"></div>
+  </body>
+</html>

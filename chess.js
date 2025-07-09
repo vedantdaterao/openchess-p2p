@@ -80,7 +80,7 @@ function piece_img(src) {
   img_tag.draggable = "true";
   img_tag.addEventListener("dragstart", (ev) => {
     clearHighlights();
-    const parentId = ev.target.parentElement.id; // e.g., "e2"
+    const parentId = ev.target.parentElement.id;
     ev.dataTransfer.setData("text/plain", parentId);
   });
   img_tag.addEventListener("click", (ev) => {
@@ -197,18 +197,10 @@ function isPiecePresent(pos) {
   // console.log("pos: x,", x, " y : ", y);
   if (!isInBounds(x, y)) {
     console.warn("isPiecePresent: called with out-of-bounds", x, y);
-    return null; // Or handle the out-of-bounds case appropriately
+    return null;
   }
   const piece = BOARD[x][y].piece;
   return piece ? piece[0] : null;
-  // const pi = String(square.piece);
-  // return pi.startsWith(side);
-
-  // const el = document.getElementById(toNotation(pos));
-  // if (!el || !el.firstElementChild) return false;
-
-  // const piece = el.firstElementChild;
-  // return !piece.id.startsWith(side);
 }
 
 function isInBounds(row, col) {
@@ -480,7 +472,6 @@ function MoveHistory(move) {
     }
   }
 
-  // Otherwise, build standard move
   if (!notation) {
     const pieceChar = pieceType === "P" ? "" : pieceType.toUpperCase();
 

@@ -11,8 +11,8 @@ window.onload = () => {
 // const boardSize = Math.min(window.innerWidth, window.innerHeight) * 0.8;
 const SQUARE_SIDE = "70px";
 // const SQUARE_SIDE = boardSize / 8 + "px";
-const COLOR_SQUARE_LIGHT = "lightblue";
-const COLOR_SQUARE_DARK = "#495670";
+const COLOR_SQUARE_LIGHT = "#c0d6df"; // "lightblue";
+const COLOR_SQUARE_DARK = "#4f6d7a"; // "#495670";
 const BOARD = [];
 const MOVES_PLAYED = [];
 let TURN = "w";
@@ -87,6 +87,7 @@ function piece_img(src) {
     if (SELECTED_SQUARE === null) {
       SELECTED_SQUARE = ev.target.parentElement.id;
       clearHighlights();
+      document.getElementById(SELECTED_SQUARE).classList.add("highlight_piece");
       const fromSquare = ev.target.parentElement.id;
       const moves = legalMoves(ev.target.id, fromSquare);
 
@@ -104,6 +105,9 @@ function clearHighlights() {
   // console.log("clearHighlights()");
   document.querySelectorAll(".highlight").forEach((el) => {
     el.classList.remove("highlight");
+  });
+  document.querySelectorAll(".highlight_piece").forEach((el) => {
+    el.classList.remove("highlight_piece");
   });
 }
 
@@ -186,14 +190,14 @@ function fromNotation(str) {
   return [8 - pos[1], pos[0].charCodeAt(0) - "a".charCodeAt(0)];
 }
 
-function toNotation(pos) {
-  const file = String.fromCharCode("a".charCodeAt(0) + pos[1]);
-  const rank = 8 - pos[0];
+function toNotation(position) {
+  const file = String.fromCharCode("a".charCodeAt(0) + position[1]);
+  const rank = 8 - position[0];
   return file + rank;
 }
 
-function isPiecePresent(pos) {
-  const [x, y] = pos;
+function isPiecePresent(position) {
+  const [x, y] = position;
   // console.log("pos: x,", x, " y : ", y);
   if (!isInBounds(x, y)) {
     console.warn("isPiecePresent: called with out-of-bounds", x, y);
@@ -207,9 +211,9 @@ function isInBounds(row, col) {
   return row >= 0 && row < 8 && col >= 0 && col < 8;
 }
 
-function legalMoves(piece, pos) {
+function legalMoves(piece, position) {
   const [side, type] = piece.split("");
-  const p = fromNotation(pos);
+  const p = fromNotation(position);
 
   switch (type) {
     // PAWN
@@ -249,8 +253,8 @@ function legalMoves(piece, pos) {
     // KING
     case PIECE.king: {
       const moves = [];
-      for (x = -1; x <= 1; x++) {
-        for (y = -1; y <= 1; y++) {
+      for (let x = -1; x <= 1; x++) {
+        for (let y = -1; y <= 1; y++) {
           if (x === 0 && y === 0) continue;
           const nx = p[0] + x;
           const ny = p[1] + y;

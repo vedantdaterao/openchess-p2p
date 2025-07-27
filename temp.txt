@@ -1,8 +1,0 @@
-14 const COLOR_SQUARE_LIGHT = "#c0d6df"; // "lightblue";
-15 const COLOR_SQUARE_DARK = "#4f6d7a"; // "#495670";
-
-90 document.getElementById(SELECTED_SQUARE).classList.add("highlight_piece");
-
-document.querySelectorAll(".highlight_piece").forEach((el) => {
-    el.classList.remove("highlight_piece");
-  });

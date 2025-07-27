@@ -1,11 +1,7 @@
 window.onload = () => {
-  // alert("width: " + window.innerWidth);
   SetBoard();
-  // console.log(BOARD);
-  // console.log("hello world");
-  // console.log("board[] :", BOARD);
   SetPieces();
-  console.log("board :", BOARD);
+  // console.log("board :", BOARD);
 };
 
 // const boardSize = Math.min(window.innerWidth, window.innerHeight) * 0.8;
@@ -102,7 +98,6 @@ function piece_img(src) {
 }
 
 function clearHighlights() {
-  // console.log("clearHighlights()");
   document.querySelectorAll(".highlight").forEach((el) => {
     el.classList.remove("highlight");
   });
@@ -198,7 +193,6 @@ function toNotation(position) {
 
 function isPiecePresent(position) {
   const [x, y] = position;
-  // console.log("pos: x,", x, " y : ", y);
   if (!isInBounds(x, y)) {
     console.warn("isPiecePresent: called with out-of-bounds", x, y);
     return null;
@@ -288,7 +282,6 @@ function legalMoves(piece, position) {
         while (isInBounds(nx, ny)) {
           const pos = [nx, ny];
           const piece = isPiecePresent(pos);
-          // console.log("pos", toNotation(pos), "     side: ", occupantSide);
           if (piece !== null) {
             if (piece !== side) {
               moves.push(pos);
@@ -329,7 +322,6 @@ function legalMoves(piece, position) {
           moves.push([nx, ny]);
           nx += dx;
           ny += dy;
-          // console.log("")
         }
       }
       return moves;
@@ -422,8 +414,8 @@ function move(x, y) {
     const isLegal = possibleMoves.some(([a, b]) => a === y1 && b === y2);
 
     if (!isLegal) {
-      console.error(`Illegal move: ${x} to ${y}`);
-      console.log("possible moves: ", possibleMoves);
+      console.warn(`Illegal move: ${x} to ${y}`);
+      console.log("possible moves: ", JSON.stringify(possibleMoves));
       return;
     }
 
@@ -480,7 +472,6 @@ function MoveHistory(move) {
     const pieceChar = pieceType === "P" ? "" : pieceType.toUpperCase();
 
     if (pieceType === "P" && isCapture) {
-      // e.g., exd5
       notation = from[0] + "x" + to;
     } else if (isCapture) {
       notation = pieceChar + "x" + to;
@@ -489,7 +480,6 @@ function MoveHistory(move) {
     }
   }
 
-  // Add to the log
   const span = document.createElement("span");
   span.textContent = notation;
   span.classList.add("move");

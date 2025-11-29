@@ -409,6 +409,13 @@ function move(x, y) {
     return;
   }
 
+  if (multiplayer && multiplayer.isConnected()) {
+    if (multiplayer.myColor !== TURN) {
+      console.warn(`Not your turn! You are ${multiplayer.myColor === 'w' ? 'WHITE' : 'BLACK'}`);
+      return;
+    }
+  }
+
   if (piece_img) {
     const possibleMoves = legalMoves(String(piece_img.id), x);
     const isLegal = possibleMoves.some(([a, b]) => a === y1 && b === y2);
@@ -437,6 +444,11 @@ function move(x, y) {
 
     MoveHistory(MOVES_PLAYED.at(-1));
 
+    // Send move to opponent BEFORE switching turn
+    if (multiplayer && multiplayer.isConnected()) {
+      multiplayer.sendMove(x, y, piece_img.id, captured?.id || null);
+    }
+
     // Switch turn
     TURN = TURN === "w" ? "b" : "w";
 
@@ -445,6 +457,62 @@ function move(x, y) {
     console.error("no piece at location :", x);
   }
 }
+
+// function move(x, y) {
+//   const [x1, x2] = fromNotation(x);
+//   const [y1, y2] = fromNotation(y);
+
+//   const div_x = document.getElementById(x);
+//   const div_y = document.getElementById(y);
+
+//   const piece_img = div_x.children[0];
+
+//   const side = String(piece_img.id)[0];
+//   if (side !== TURN) {
+//     console.warn(`It's ${TURN === "w" ? "White's" : "Black's"} turn.`);
+//     return;
+//   }
+
+//   if (piece_img) {
+//     const possibleMoves = legalMoves(String(piece_img.id), x);
+//     const isLegal = possibleMoves.some(([a, b]) => a === y1 && b === y2);
+
+//     if (!isLegal) {
+//       console.warn(`Illegal move: ${x} to ${y}`);
+//       console.log("possible moves: ", JSON.stringify(possibleMoves));
+//       return;
+//     }
+
+//     const captured = div_y.children[0];
+
+//     if (captured) div_y.removeChild(captured);
+//     div_y.appendChild(piece_img);
+//     div_x.innerHTML = "";
+
+//     BOARD[x1][x2]["piece"] = "";
+//     BOARD[y1][y2]["piece"] = piece_img.id;
+
+//     MOVES_PLAYED.push({
+//       from: x,
+//       to: y,
+//       piece: piece_img.id,
+//       captured: captured?.id || null,
+//     });
+
+//     MoveHistory(MOVES_PLAYED.at(-1));
+
+//     if (multiplayer && multiplayer.isConnected()) {
+//       multiplayer.sendMove(x, y, piece_img.id, captured?.id || null);
+//     }
+
+//     // Switch turn
+//     TURN = TURN === "w" ? "b" : "w";
+
+//     console.log("MOVES PLAYED: ", MOVES_PLAYED);
+//   } else {
+//     console.error("no piece at location :", x);
+//   }
+// }
 
 const history_div = document.getElementsByClassName("move_history")[0];
 let moveCount = 1;

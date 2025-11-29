@@ -1,40 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Chess</title>
-    <link rel="stylesheet" href="normalize.css" />
-    <link rel="stylesheet" href="styles.css" />
-    <script src="chess.js" defer></script>
-  </head>
-  <body>
-    <!-- <body bgcolor="#181818"> -->
-    <div
-      class="app"
-      style="display: grid; grid-template-columns: min-content auto"
-    >
-      <div class="rank-labels">
-        <div><p>8</p></div>
-        <div><p>7</p></div>
-        <div><p>6</p></div>
-        <div><p>5</p></div>
-        <div><p>4</p></div>
-        <div><p>3</p></div>
-        <div><p>2</p></div>
-        <div><p>1</p></div>
+
+<head>
+  <title>Chess</title>
+  <link rel="stylesheet" href="normalize.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="screen-div">
+    <div>
+      <div class="app" style="display: grid; grid-template-columns: min-content auto">
+        <div class="rank-labels">
+          <div>
+            <p>8</p>
+          </div>
+          <div>
+            <p>7</p>
+          </div>
+          <div>
+            <p>6</p>
+          </div>
+          <div>
+            <p>5</p>
+          </div>
+          <div>
+            <p>4</p>
+          </div>
+          <div>
+            <p>3</p>
+          </div>
+          <div>
+            <p>2</p>
+          </div>
+          <div>
+            <p>1</p>
+          </div>
+        </div>
+        <div class="board"></div>
       </div>
-      <div class="board"></div>
-    </div>
       <div class="file-labels">
-        <div><p>a</p></div>
-        <div><p>b</p></div>
-        <div><p>c</p></div>
-        <div><p>d</p></div>
-        <div><p>e</p></div>
-        <div><p>f</p></div>
-        <div><p>g</p></div>
-        <div><p>h</p></div>
+        <div>
+          <p>a</p>
+        </div>
+        <div>
+          <p>b</p>
+        </div>
+        <div>
+          <p>c</p>
+        </div>
+        <div>
+          <p>d</p>
+        </div>
+        <div>
+          <p>e</p>
+        </div>
+        <div>
+          <p>f</p>
+        </div>
+        <div>
+          <p>g</p>
+        </div>
+        <div>
+          <p>h</p>
+        </div>
       </div>
     </div>
+
+    <div class="panel">
+      <div class="center-wrapper">
+
+        <div class="clock black-clock">
+          <!-- <div class="clock-label">BLACK</div> -->
+          <div id="black_time" class="clock-time">10:00</div>
+        </div>
+
+
+        <div class="move_history"></div>
+
+        <div class="clock white-clock">
+          <!-- <div class="clock-label">WHITE</div> -->
+          <div id="white_time" class="clock-time">10:00</div>
+        </div>
+
+      </div>
+      <div class="multiplayer">
+        <div class="user-info">
+          <div class="user-id-display">
+            <label>User ID:</label>
+            <span id="user_id" class="user-id">------</span>
+            <button id="copy_id_btn" class="copy-btn">Copy</button>
+          </div>
+          <div id="connection_status" class="status">Connecting to server...</div>
+        </div>
+
+        <form id="challengeForm" class="challenge-form">
+          <input type="text" id="peer_user_id" placeholder="Enter opponent's ID" required maxlength="6" style="text-transform: uppercase;" />
+          <button type="submit">Challenge</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+  <script src="chess.js" defer></script>
+  <script src="multiplayer.js" defer></script>
+
+  <!-- <div class="panel">
     <div class="move_history"></div>
-  </body>
+    <div class="multiplayer">
+      <div class="user-info">
+        <div class="user-id-display">
+          <label>Your ID:</label>
+          <span id="user_id" class="user-id">------</span>
+          <button id="copy_id_btn" class="copy-btn">Copy</button>
+        </div>
+        <div id="connection_status" class="status">Connecting to server...</div>
+      </div>
+
+      <form id="challengeForm" class="challenge-form">
+        <input type="text" id="peer_user_id" placeholder="Enter opponent's ID" required maxlength="6" style="text-transform: uppercase;" />
+        <button type="submit">Challenge</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
+  <script src="chess.js" defer></script>
+  <script src="multiplayer.js" defer></script> -->
+</body>
+
 </html>

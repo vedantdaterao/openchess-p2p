@@ -80,9 +80,22 @@ class ChessMultiplayer {
 
         this.messageBox = new MessageBox();
 
-        this.config = {
-            iceServers: [{ urls: "stun:stun.l.google.com:19302" }, { urls: "stun:stun1.l.google.com:19302" }],
-        };
+        this.config = null;
+    }
+
+    async fetchTurnCredentials() {
+        try {
+            const response = await fetch(`${SIGNALING_SERVER}/turn-credentials`);
+            const data = await response.json();
+            this.config = data;
+            console.log("ICE servers configured:", data.iceServers.length);
+        } catch (err) {
+            console.error("Failed to fetch TURN credentials:", err);
+            // Fallback to STUN only
+            this.config = {
+                iceServers: [{ urls: "stun:stun.l.google.com:19302" }, { urls: "stun:stun1.l.google.com:19302" }],
+            };
+        }
     }
 
     generateUserId() {
@@ -205,6 +218,11 @@ class ChessMultiplayer {
             return;
         }
 
+        // Fetch TURN credentials if not already loaded
+        if (!this.config) {
+            await this.fetchTurnCredentials();
+        }
+
         this.challengeInProgress = true;
         this.opponentId = opponentId;
         this.isHost = true;
@@ -233,6 +251,11 @@ class ChessMultiplayer {
     }
 
     async acceptChallenge(offer) {
+        // Fetch TURN credentials if not already loaded
+        if (!this.config) {
+            await this.fetchTurnCredentials();
+        }
+
         this.isHost = false;
         this.myColor = "b";
 

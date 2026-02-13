@@ -10,6 +10,9 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit, join_room, leave_room
 from datetime import datetime, timedelta
+import requests
+
+METERED_API_KEY = os.environ.get('METERED_API_KEY', '')
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', secrets.token_hex(16))
@@ -17,6 +20,32 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', secrets.token_hex(16))
 # CORS - update with your GitHub Pages URL after deployment
 ALLOWED_ORIGINS = os.environ.get('ALLOWED_ORIGINS', '*').split(',')
 CORS(app, resources={r"/*": {"origins": ALLOWED_ORIGINS}})
+
+@app.route('/turn-credentials', methods=['GET'])
+def get_turn_credentials():
+    """Get TURN credentials from Metered API"""
+    # Default STUN servers
+    ice_servers = [
+        {'urls': 'stun:stun.l.google.com:19302'},
+        {'urls': 'stun:stun1.l.google.com:19302'}
+    ]
+    
+    # Try to add TURN servers from Metered
+    if METERED_API_KEY:
+        try:
+            response = requests.get(
+                'https://openchess.metered.live/api/v1/turn/credentials',
+                params={'apiKey': METERED_API_KEY},
+                timeout=5
+            )
+            turn_servers = response.json()
+            ice_servers.extend(turn_servers)
+            print('TURN credentials fetched successfully')
+        except Exception as e:
+            print(f'Failed to fetch TURN credentials: {e}')
+    
+    return jsonify({'iceServers': ice_servers})
+
 
 socketio = SocketIO(
     app, 

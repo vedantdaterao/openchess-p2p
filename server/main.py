@@ -4,19 +4,30 @@ WebRTC Signaling Server for Chess Game
 Handles peer connection signaling between players
 """
 
+import secrets
+import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit, join_room, leave_room
-import secrets
 from datetime import datetime, timedelta
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = secrets.token_hex(16)
-CORS(app, resources={r"/*": {"origins": "*"}})
-socketio = SocketIO(app, cors_allowed_origins="*", ping_timeout=60, ping_interval=25)
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', secrets.token_hex(16))
 
-active_users = {}  # {user_id: {'sid': socket_id, 'last_seen': timestamp}}
-pending_challenges = {}  # {challenge_id: {'from': user_id, 'to': user_id, 'offer': data}}
+# CORS - update with your GitHub Pages URL after deployment
+ALLOWED_ORIGINS = os.environ.get('ALLOWED_ORIGINS', '*').split(',')
+CORS(app, resources={r"/*": {"origins": ALLOWED_ORIGINS}})
+
+socketio = SocketIO(
+    app, 
+    cors_allowed_origins=ALLOWED_ORIGINS,
+    ping_timeout=60, 
+    ping_interval=25,
+    async_mode='threading'
+)
+
+active_users = {}
+pending_challenges = {}
 
 def cleanup_inactive_users():
     cutoff = datetime.now() - timedelta(minutes=5)
@@ -33,7 +44,6 @@ def handle_connect():
 @socketio.on('disconnect')
 def handle_disconnect():
     print(f'Client disconnected: {request.sid}')
-    # Remove user from active users
     user_id = None
     for uid, data in list(active_users.items()):
         if data['sid'] == request.sid:
@@ -183,11 +193,17 @@ def get_user_status(user_id):
     })
 
 if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
+    is_production = os.environ.get('RENDER', False)
+    
     print("-" * 69)
     print("WebRTC Signaling Server for Chess")
     print("-" * 69)
-    print("Server starting on http://0.0.0.0:5000")
-    print("WebSocket endpoint: ws://0.0.0.0:5000/socket.io/")
+    print(f"Environment: {'Production (Render)' if is_production else 'Development'}")
+    print(f"Server starting on port {port}")
     print("-" * 69)
     
-    socketio.run(app, host='0.0.0.0', port=5000, debug=True, allow_unsafe_werkzeug=True)
+    if is_production:
+        socketio.run(app, host='0.0.0.0', port=port)
+    else:
+        socketio.run(app, host='0.0.0.0', port=port, debug=True)

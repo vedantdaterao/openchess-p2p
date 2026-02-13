@@ -6,6 +6,10 @@ blinker==1.9.0
     # via flask
 click==8.3.1
     # via flask
+dnspython==2.8.0
+    # via eventlet
+eventlet==0.40.4
+    # via server (pyproject.toml)
 flask==3.1.2
     # via
     #   server (pyproject.toml)
@@ -15,6 +19,8 @@ flask-cors==6.0.2
     # via server (pyproject.toml)
 flask-socketio==5.6.0
     # via server (pyproject.toml)
+greenlet==3.3.1
+    # via eventlet
 h11==0.16.0
     # via wsproto
 itsdangerous==2.2.0

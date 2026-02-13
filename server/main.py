@@ -23,7 +23,7 @@ socketio = SocketIO(
     cors_allowed_origins=ALLOWED_ORIGINS,
     ping_timeout=60, 
     ping_interval=25,
-    async_mode='threading'
+    async_mode='eventlet'
 )
 
 active_users = {}
@@ -204,6 +204,7 @@ if __name__ == '__main__':
     print("-" * 69)
     
     if is_production:
-        socketio.run(app, host='0.0.0.0', port=port)
+        import eventlet
+        eventlet.wsgi.server(eventlet.listen(('0.0.0.0', port)), app)
     else:
         socketio.run(app, host='0.0.0.0', port=port, debug=True)
